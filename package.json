@@ -1,0 +1,16 @@
+{
+  "name": "http_with_sqlite",
+  "version": "1.0.0",
+  "description": "sqlite test",
+  "main": "index.js",
+  "dependencies": {
+    "sqlite3": "^5.0.8",
+    "bluebird": "^3.7.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
