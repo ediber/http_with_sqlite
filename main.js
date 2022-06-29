@@ -41,6 +41,8 @@ const server = http.createServer(async (req, res) => {
 server.listen(8080);
 
 function parse_query_string(query) {
+    let arr = query.split("?");
+    query = arr[arr.length - 1];
     var vars = query.split("&");
     var query_string = {};
     for (var i = 0; i < vars.length; i++) {
@@ -52,7 +54,7 @@ function parse_query_string(query) {
             query_string[key] = value;
             // If second entry with this name
         } else if (typeof query_string[key] === "string") {
-            var arr = [query_string[key], value];
+            arr = [query_string[key], value];
             query_string[key] = arr;
             // If third or later entry with this name
         } else {
