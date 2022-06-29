@@ -1,6 +1,8 @@
-
-
 const http = require('http');
+
+const DbHelper = require('./db_helper');
+const dbHelper = new DbHelper();
+
 
 const server = http.createServer(async (req, res) => {
     if (req.url === '/') {
@@ -17,58 +19,20 @@ const server = http.createServer(async (req, res) => {
         const parsed_qs = parse_query_string(req.url);
         console.log(parsed_qs.name);
 
-        sqlAdd(parsed_qs.name, parsed_qs.id);
+        dbHelper.sqlAdd(parsed_qs.name, parsed_qs.id);
 
         res.end();
     }
 
     if (req.url.includes('/select_all')) {
-        const rows = await selectAll();
+        const rows = await dbHelper.selectAll();
         res.write(JSON.stringify(rows));
         res.end();
     }
 });
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database("./mock.db", sqlite3.OPEN_READWRITE, (err)=> {
-        if(err) return console.error(err.message);
-
-        console.log("connection sucesfull1");
-    }
-);
-
 // for first time
 //db.run('CREATE TABLE users(name, id)');
-
-function sqlAdd(name, id) {
-    const sqlInsert = "INSERT INTO users(name, id) VALUES(?,?)";
-    db.run(sqlInsert, [name, id], (err) => {
-        if (err) return console.error(err.message);
-
-        console.log(`raw added: ${name}, ${id}`);
-    });
-}
-
-function selectAll() {
-    return new Promise((resolve, reject) => {
-        const sqlSelect = `SELECT * FROM users`;
-        var ans = [];
-
-        db.all(sqlSelect, [], (err, rows) => {
-            if (err) {
-            //    return console.error(err.message);
-                reject(err.message);
-            }
-
-            rows.forEach((row) => {
-                console.log(row);
-                ans.push(row);
-            })
-
-            resolve(ans);
-        });
-    })
-}
 
 /*db.close((err)=>{
     if(err) return console.error(err.message);
